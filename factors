@@ -1,0 +1,50 @@
+#!/usr/bin/python3
+
+import sys
+import time
+
+def factorize(num):
+    factors = []
+    # Check divisibility by 2
+    while num % 2 == 0:
+        factors.append(2)
+        num //= 2
+    
+    # Continue with odd numbers
+    for i in range(3, int(num**0.5) + 1, 2):
+        while num % i == 0:
+            factors.append(i)
+            num //= i
+    
+    # If num is a prime number greater than 2
+    if num > 2:
+        factors.append(num)
+    
+    return factors[:2] if len(factors) >= 2 else factors
+
+def main():
+    if len(sys.argv) != 2:
+        print("Usage: factors <file>")
+        sys.exit(1)
+    
+    input_file = sys.argv[1]
+
+    with open(input_file, 'r') as file:
+        numbers = file.readlines()
+    
+    for num in numbers:
+        num = int(num)
+        start_time = time.time()
+        factors = factorize(num)
+        end_time = time.time()
+        
+        # Check if it took more than 5 seconds
+        if end_time - start_time > 5:
+            print(f"Timeout for number {num}")
+            break
+        
+        print(f"{num}={'*'.join(map(str, factors))}")
+
+if __name__ == "__main__":
+    main()
+
